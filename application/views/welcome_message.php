@@ -2,7 +2,11 @@
 
 <?php function css_section(){  ?>
   <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
-
+  <style>
+    hr{
+      border-top:1px solid #ccc;
+    }
+  </style>
 <?php } ?>
 
 <script>
@@ -41,14 +45,19 @@
         <input name="search" type="text" /> <button class="js-search-btn btn btn-default" >搜尋地址</button>
         <div id="search-result"></div>
       </p>
+      <hr />
       <ul class="points" style="margin-top:10px;text-align:left;">
        
       </ul>
       <a class="js-close btn btn">Close Line/Area</a>
-      <br />
       <a class="js-clear btn btn">Clear all points</a>
-      
       <p id="status"></p>
+      <br />
+      <?php if(isset($key)){ ?>
+          <a target="_blank" class="btn" href="<?=site_url("/marker/".$key)?>">Direct Link </a>
+          &nbsp; &nbsp; |&nbsp; &nbsp; 
+          <a target="_blank"  class="btn" href="<?=site_url("/api/marker/".$key)?>">API </a>
+      <?php }?>
       <hr />
       Power by <a href="https://github.com/tony1223/" target="_blank">TonyQ</a>
     </div>
@@ -203,9 +212,9 @@
         $(".points").html(out.join(""));
 
         if(this.mode){
-          $("#status").html("Mode:"+this.mode + " <a href='#' class='js-cancel-insert'>Cancel</a>");
+          $("#status").html("Mode:"+this.mode + " <a href='#' class='js-cancel-insert'>Cancel</a>").show();
         }else{
-          $("#status").html("");
+          $("#status").hide().html("");
         }
 
         $(".js-type").each(function(){
