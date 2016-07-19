@@ -228,7 +228,7 @@
       map.closeLineOrArea();
       e.preventDefault();
     });
-    
+
     $(".js-clear").on("click",function(e){
       map.clearPoints();
       e.preventDefault();
@@ -315,7 +315,7 @@
       e.preventDefault();
     });
 
-    $(".js-close-control").on("click",function(){
+    $(".js-close-control").on("click",function(e){
       var close = $(".js-close-control").html() =="－";
       if(close){
         $("#control .body").hide();        
@@ -324,6 +324,7 @@
         $("#control .body").show();        
         $(".js-close-control").html("－");
       }
+      e.preventDefault();
     });
   </script>
   <script>
