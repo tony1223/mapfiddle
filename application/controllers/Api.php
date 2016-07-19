@@ -54,7 +54,7 @@ class Api extends MY_Controller {
 		session_write_close();
 	}
 
-	public function marker($key){
+	public function marker($key,$type="fiddle"){
 		$this->load->database();
 		$this->load->model("mapModel");
 		$item = $this->mapModel->get_fiddle($key);
@@ -62,25 +62,92 @@ class Api extends MY_Controller {
 		header('Content-Type: application/json');
 
 		if($item ==null){
+			http_response_code(404);
 			die(json_encode([
 				"isSuccess" => false,
 				"message" => "key not exist "
 			]));
 		}	
 
+
+		if($type == "fiddle"){
+			die(json_encode($this->_render_fiddle_format([$item])));
+		}else if($type =="geojson"){
+			die(json_encode($this->_render_geojson_format([$item])));
+		}
+	}
+
+	public function _render_geojson_format($fiddles){
+		$features = [];
+		foreach($fiddles as $fiddle){
+			$feature = [
+				"type"=>"Feature",
+				"properties" => [],
+				"geometry" => [
+
+				]
+			];
+
+			if($fiddle->type == 0 ){
+				$feature["geometry"]["type"] = "Point";
+
+				$point = json_decode($fiddle->points)[0];
+
+				$feature["geometry"]["coordinates"] = $this->_point_to_coordinate($point);
+			}else if($fiddle->type == 1){
+				$feature["geometry"]["type"] = "LineString";
+				$coordinates= [];
+
+				$points = json_decode($fiddle->points);
+				foreach($points as $point){
+					$coordinates[] = $this->_point_to_coordinate($point);
+				}
+
+				$feature["geometry"]["coordinates"] = $coordinates;
+			}else if($fiddle->type == 2){
+				$feature["geometry"]["type"] = "Polygon";
+				$coordinates= [];
+
+				$points = json_decode($fiddle->points);
+				foreach($points as $point){
+					$coordinates[] = $this->_point_to_coordinate($point);
+				}
+
+				//geojson require first and last have to be same
+				$coordinates[] = $this->_point_to_coordinate($points[0]);
+
+				$feature["geometry"]["coordinates"] = [$coordinates];
+
+			}
+			$features[] = $feature;
+		}
+		return [
+			"type" => "FeatureCollection",
+			"features" => $features
+		];
+		
+	}
+
+	public function _point_to_coordinate($point){
+		return [
+			$point->latlng->lng,
+			$point->latlng->lat
+		];
+	} 
+	public function _render_fiddle_format($fiddles){
 		$types = [0 => "Point",1=>"Line",2=>"Area"];
-
 		$res = [];
-		$res[$item->key] = ["key" => $item->key,
-			"type" => $item->type,
-			"title" => $item->title,
-			"type_name" => $types[$item->type],
-			"latlngs" => json_decode($item->points)];
-
-		die(json_encode([
+		foreach($fiddles as $item){
+			$res[$item->key] = ["key" => $item->key,
+				"type" => $item->type,
+				"title" => $item->title,
+				"type_name" => $types[$item->type],
+				"latlngs" => json_decode($item->points)];
+		}
+		return [
 			"isSuccess" => true,
 			"data" => $res
-		]));
+		];
 	}
 
 }

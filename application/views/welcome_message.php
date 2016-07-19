@@ -54,10 +54,24 @@
       <p id="status"></p>
       <br />
       <?php if(isset($fiddle_key) ){ ?>
-          <a target="_blank" class="btn" href="<?=site_url("/marker/".$fiddle_key)?>">Direct Link </a>
+          <a target="_blank" class="btn js-direct" href="<?=site_url("/marker/".$fiddle_key)?>">Direct Link </a>
+          &nbsp; &nbsp; 
+          <p class='js-apis'> API: 
+            <?php 
+            $api_types = ["fiddle","geojson" /*,"kml","kmz"*/]; 
+            ?>
+
+            <?php foreach($api_types as $type) { ?>
+            <a target="_blank" href='/api/marker/<?=$fiddle_key?>/<?=$type?>'><?=$type?></a>
+            &nbsp;&nbsp;
+            <?php } ?>
+          </p>
+      <?php }else{ ?>
+          <a target="_blank" class="btn js-direct" style='display:none;'>Direct Link </a>
           &nbsp; &nbsp; |&nbsp; &nbsp; 
-          <a target="_blank"  class="btn" href="<?=site_url("/api/marker/".$fiddle_key)?>">API </a>
-      <?php }?>
+          <div class='js-apis'  style='display:none;'>
+          </div>
+      <?php } ?>
       <hr />
       Power by <a href="https://github.com/tony1223/" target="_blank">TonyQ</a>, <a href="https://github.com/tony1223/mapfiddle" target="_blank"> fork the project </a>
     </div>
@@ -293,7 +307,13 @@
 
         if(history.pushState){
           history.pushState({}, document.title, '/marker/'+ res.data.key);
-          $("")
+          $(".js-direct").prop("href",'/marker/'+ res.data.key).show();
+
+          var api_types = ["fiddle","geojson"/*,"kml","kmz" */];
+
+          $(".js-apis").html("API: "+api_types.map(function(type){
+            return "<a target='_blank'  href='/api/marker/" + res.data.key + "/"+type+"'>"+type+"</a>";
+          }).join("&nbsp;&nbsp;"));
         }else{
           self.location.href='/marker/'+ res.data.key;
         }
