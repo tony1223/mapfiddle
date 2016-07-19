@@ -53,10 +53,10 @@
       <a class="js-clear btn btn">Clear all points</a>
       <p id="status"></p>
       <br />
-      <?php if(isset($key)){ ?>
-          <a target="_blank" class="btn" href="<?=site_url("/marker/".$key)?>">Direct Link </a>
+      <?php if(isset($fiddle_key) ){ ?>
+          <a target="_blank" class="btn" href="<?=site_url("/marker/".$fiddle_key)?>">Direct Link </a>
           &nbsp; &nbsp; |&nbsp; &nbsp; 
-          <a target="_blank"  class="btn" href="<?=site_url("/api/marker/".$key)?>">API </a>
+          <a target="_blank"  class="btn" href="<?=site_url("/api/marker/".$fiddle_key)?>">API </a>
       <?php }?>
       <hr />
       Power by <a href="https://github.com/tony1223/" target="_blank">TonyQ</a>
@@ -189,6 +189,12 @@
             marker = L.marker(this.points[this.insert_index+1].latlng).addTo(that.map);
             that.currentMarkers.push(marker);
           }
+        }
+
+        if(this.points.length){
+          $(".js-clear").show();
+        }else{
+          $(".js-clear").hide();
         }
 
         if((this.type == 1) && this.points.length > 1){
