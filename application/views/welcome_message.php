@@ -23,7 +23,7 @@
     Marker Name: <input type="text" name="title" value="<?=h($fiddle_title)?>" />
       <button class="js-saveOrUpdate btn btn-default">Save</button>
       <!-- <button class="js-fork btn btn-default">Fork</button> -->
-
+    <a style='display:none;margin-left:40px;' id="saved_link" href="">Link</a>
   </p>
 
   <div id="mapid" style="width: 100%; height: 600px"></div>
@@ -286,11 +286,10 @@
         }
 
         $(".js-saveOrUpdate").prop("disabled","");
-        $(".js-saveOrUpdate").text("saved").fadeIn();
+        $(".js-saveOrUpdate").text("save").fadeIn();
 
-        setTimeout(function(){
-          $(".js-saveOrUpdate").text("save");
-        },2000);
+        $("#saved_link").prop("href",'/marker/'+ res.data.key).text("The fiddle is saved ").show();
+
 
         if(history.pushState){
           history.pushState({}, document.title, '/marker/'+ res.data.key);
