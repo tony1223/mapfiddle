@@ -68,7 +68,6 @@
           </p>
       <?php }else{ ?>
           <a target="_blank" class="btn js-direct" style='display:none;'>Direct Link </a>
-          &nbsp; &nbsp; |&nbsp; &nbsp; 
           <div class='js-apis'  style='display:none;'>
           </div>
       <?php } ?>
@@ -313,7 +312,7 @@
 
           $(".js-apis").html("API: "+api_types.map(function(type){
             return "<a target='_blank'  href='/api/marker/" + res.data.key + "/"+type+"'>"+type+"</a>";
-          }).join("&nbsp;&nbsp;"));
+          }).join("&nbsp;&nbsp;")).show();
         }else{
           self.location.href='/marker/'+ res.data.key;
         }
