@@ -73,6 +73,7 @@ class Api extends MY_Controller {
 		$res = [];
 		$res[$item->key] = ["key" => $item->key,
 			"type" => $item->type,
+			"title" => $item->title,
 			"type_name" => $types[$item->type],
 			"latlngs" => json_decode($item->points)];
 
