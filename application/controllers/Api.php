@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
@@ -51,6 +52,34 @@ class Api extends MY_Controller {
 		]));
 		
 		session_write_close();
+	}
+
+	public function marker($key){
+		$this->load->database();
+		$this->load->model("mapModel");
+		$item = $this->mapModel->get_fiddle($key);
+		header("Access-Control-Allow-Origin: *");
+		header('Content-Type: application/json');
+
+		if($item ==null){
+			die(json_encode([
+				"isSuccess" => false,
+				"message" => "key not exist "
+			]));
+		}	
+
+		$types = [0 => "Point",1=>"Line",2=>"Area"];
+
+		$res = [];
+		$res[$item->key] = ["key" => $item->key,
+			"type" => $item->type,
+			"type_name" => $types[$item->type],
+			"latlngs" => json_decode($item->points)];
+
+		die(json_encode([
+			"isSuccess" => true,
+			"data" => $res
+		]));
 	}
 
 }
