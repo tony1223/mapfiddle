@@ -42,7 +42,7 @@
 
     <div class="body" style="margin-top:10px;">
       <p>
-        <input name="search" type="text" /> <button class="js-search-btn btn btn-default" >搜尋地址</button>
+        <input name="search" type="text" /> <button class="js-search-btn btn btn-default" >Search </button>
         <div id="search-result"></div>
       </p>
       <hr />
