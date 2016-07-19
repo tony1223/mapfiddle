@@ -1,0 +1,22 @@
+<?php
+
+class MapModel extends CI_Model {
+
+  public function __construct()
+  {
+    // Call the CI_Model constructor
+    parent::__construct();
+  }
+  
+  public function savePoints($key,$title,$pointers,$ip,$type){
+    $this->db->insert("fiddles",["key" => $key,"title" => $title,"points" => $pointers,"ip" => $ip,"type" => $type ]);
+
+    return $this->db->insert_id();
+  }
+
+  public function get_fiddle($key){
+    return array_first_item(
+      $this->db->get_where("fiddles",["key"=> $key])->result()
+    );
+  }
+}

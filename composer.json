@@ -1,0 +1,15 @@
+{
+	"description": "olympic 2016 cht",
+	"name": "cht/olympic2016",
+	"type": "project",
+	"require": {
+		"php": ">=5.2.4",
+    "facebook/php-sdk-v4" : "~5.0"
+	},
+	"suggest": {
+		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
+	},
+	"require-dev": {
+		"mikey179/vfsStream": "1.1.*"
+	}
+}
