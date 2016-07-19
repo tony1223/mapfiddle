@@ -21,7 +21,7 @@ class Welcome extends MY_Controller {
 	public function index()
 	{
 		$this->load->view('welcome_message',[
-				"title" => "new Marker",
+				"fiddle_title" => "new Marker",
 				"points" => [],
 				"fiddle_type" => 0
 		]);
