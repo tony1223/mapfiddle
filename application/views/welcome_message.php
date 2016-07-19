@@ -222,7 +222,9 @@
   </script>
   <script>
 
-    var mymap = L.map('mapid').setView([25.043325,121.5195076], 15);
+    var center = map.points.length == 0 ? [25.043325,121.5195076] : map.points[0].latlng;
+
+    var mymap = L.map('mapid').setView(center, 15);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
       maxZoom: 18,
