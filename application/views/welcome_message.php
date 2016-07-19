@@ -269,10 +269,12 @@
     });
     
     $(".js-saveOrUpdate").click(function(){
+      $(".js-saveOrUpdate").prop("disabled","disabled");
       if(map.points.length == 0){
         alert("At least one point. (至少要設定一個座標點)");
         return false;
       }
+      $(".js-saveOrUpdate").text("saving");
       $.post("/api/saveOrUpdate/",{
         pointers:JSON.stringify(map.points),
         title:$("[name=title]").val(),
@@ -282,7 +284,20 @@
           alert("save fail");
           return true;
         }
-        self.location.href='/marker/'+ res.data.key;
+
+        $(".js-saveOrUpdate").prop("disabled","");
+        $(".js-saveOrUpdate").text("saved").fadeIn();
+
+        setTimeout(function(){
+          $(".js-saveOrUpdate").text("save");
+        },2000);
+
+        if(history.pushState){
+          history.pushState({}, document.title, '/marker/'+ res.data.key);
+          $("")
+        }else{
+          self.location.href='/marker/'+ res.data.key;
+        }
       })
     });
 
