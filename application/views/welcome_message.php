@@ -29,7 +29,7 @@
   <div id="mapid" style="width: 100%; height: 600px"></div>
   
   
-  <div id='control' data-points="" style="z-index: 1000;position:fixed;padding:10px;left:30px;top:140px;background:#EEEEEE;border-radius:5px;opacity:0.9;min-width:340px;">
+  <div id='control' data-points="" style="z-index: 1000;position:fixed;padding:10px;left:30px;top:160px;background:#EEEEEE;border-radius:5px;opacity:0.9;min-width:340px;">
     
     <div class="header">
       <a class="js-close-control" style='float:right;font-size:20px;text-decoration: none;' href="">－</a>
@@ -59,13 +59,17 @@
           <a target="_blank"  class="btn" href="<?=site_url("/api/marker/".$fiddle_key)?>">API </a>
       <?php }?>
       <hr />
-      Power by <a href="https://github.com/tony1223/" target="_blank">TonyQ</a>
+      Power by <a href="https://github.com/tony1223/" target="_blank">TonyQ</a>, <a href="https://github.com/tony1223/mapfiddle" target="_blank"> fork the project </a>
     </div>
   </div>
 
 
   <script src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
   <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script> 
+  
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSIFJslwcgjr4ttFgt0TX3KSG6sqLkzY8"
+        ></script>
+  <script src="<?=base_url("js/google_tile.js")?>"></script>
 
   <script>
 
@@ -291,7 +295,7 @@
         key:"AIzaSyBSIFJslwcgjr4ttFgt0TX3KSG6sqLkzY8"
       },function(res){
         if(res.status != "OK"){
-          alert("search fail");
+          $("#search-result").html("Address not found.");
           return true;
         }
 
@@ -351,19 +355,26 @@
 
     var mymap = L.map('mapid').setView(center, 15);
 
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-      maxZoom: 18,
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
-        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-      id: 'mapbox.streets'
-    }).addTo(mymap);
+    
 
     map.bind(mymap);
     mymap.on("click",function(e){
       map.handleClick(e.latlng);
     });
     map.render();
+
+    var osm = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      id: 'mapbox.streets'
+    });
+
+    // var ggl = new L.Google();
+    var ggl2 = new L.Google('roadmap');
+    mymap.addLayer(ggl2);
+    mymap.addControl(new L.Control.Layers( {'Google':ggl2,'OSM':osm}, {}));
 
   </script>
   
