@@ -339,6 +339,9 @@
   <script>
 
     var center = map.points.length == 0 ? [25.043325,121.5195076] : map.points[0].latlng;
+    if(map.points.length){
+      $(".js-close-control").click();
+    }
 
     var mymap = L.map('mapid').setView(center, 15);
 
