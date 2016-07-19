@@ -22,7 +22,7 @@ class Welcome extends MY_Controller {
 	{
 		$this->load->view('welcome_message',[
 				"fiddle_title" => "new Marker",
-				"points" => [],
+				"points" => "[]",
 				"fiddle_type" => 0
 		]);
 		session_write_close();

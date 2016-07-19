@@ -6,8 +6,8 @@
 <?php } ?>
 
 <script>
-  window.points = <?=json_encode($points)?>;
-  window.type = <?=json_encode($fiddle_type)?> || 0;
+  window.points = JSON.parse(<?=json_encode($points)?>);
+  window.type = (<?=json_encode($fiddle_type)?>) || 0;
   if(window.points.push == null){
     window.points = [];
   }
