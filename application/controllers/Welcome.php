@@ -39,6 +39,7 @@ class Welcome extends MY_Controller {
 
 
 		$this->load->view('welcome_message',[
+				"pageTitle" => $item->title,
 				"fiddle_title" => $item->title,
 				"points" => json_encode(json_decode($item->points)),
 				"fiddle_type" => $item->type,
