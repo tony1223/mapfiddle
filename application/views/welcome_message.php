@@ -1,7 +1,7 @@
 <?php include(__DIR__."/_header.php"); ?>
 
 <?php function css_section(){  ?>
-  <link rel="stylesheet" href="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@0.7.7/dist/leaflet.css" />
   <style>
     hr{
       border-top:1px solid #ccc;
@@ -77,7 +77,7 @@
   </div>
 
 
-  <script src="https://npmcdn.com/leaflet@0.7.7/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@0.7.7/dist/leaflet.js"></script>
   <script   src="https://code.jquery.com/jquery-2.2.4.min.js"   integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="   crossorigin="anonymous"></script> 
   
    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBSIFJslwcgjr4ttFgt0TX3KSG6sqLkzY8"
