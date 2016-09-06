@@ -25,7 +25,7 @@ class MapModel extends CI_Model {
     $this->db->where_in("key" , $keys);
     $q = $this->db->get("fiddles");
 
-    return array_first_item(
+    return (
       $q->result()
     );
   }

@@ -1,5 +1,4 @@
 <?php
-
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Api extends MY_Controller {
@@ -78,19 +77,33 @@ class Api extends MY_Controller {
 	}
 
 	public function markers($keys,$type="fiddle"){
+
 		$this->load->database();
 		$this->load->model("mapModel");
 
-		$search_keys = preg_split(",", $keys);
+
+		$search_keys = preg_split("/,/", $keys);
 		$item = $this->mapModel->get_fiddles($search_keys);
 		header("Access-Control-Allow-Origin: *");
 		header('Content-Type: application/json');
 
-		if($item ==null){
+		$checks = [];
+		foreach($search_keys as $key){
+			$checks[$key] = 1;
+		}
+
+
+		foreach($item as $it){
+			if($checks[$it->key]){
+				unset($checks[$it->key]);
+			}
+		}
+
+		if(count($checks) != 0 ){
 			http_response_code(404);
 			die(json_encode([
 				"isSuccess" => false,
-				"message" => "key not exist "
+				"message" => "key not exist : ".join(array_keys($checks),",")
 			]));
 		}	
 
