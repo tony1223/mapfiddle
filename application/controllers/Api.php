@@ -77,6 +77,31 @@ class Api extends MY_Controller {
 		}
 	}
 
+	public function markers($keys,$type="fiddle"){
+		$this->load->database();
+		$this->load->model("mapModel");
+
+		$search_keys = preg_split(",", $keys);
+		$item = $this->mapModel->get_fiddles($search_keys);
+		header("Access-Control-Allow-Origin: *");
+		header('Content-Type: application/json');
+
+		if($item ==null){
+			http_response_code(404);
+			die(json_encode([
+				"isSuccess" => false,
+				"message" => "key not exist "
+			]));
+		}	
+
+
+		if($type == "fiddle"){
+			die(json_encode($this->_render_fiddle_format($item)));
+		}else if($type =="geojson"){
+			die(json_encode($this->_render_geojson_format($item)));
+		}
+	}
+
 	public function _render_geojson_format($fiddles){
 		$features = [];
 		foreach($fiddles as $fiddle){

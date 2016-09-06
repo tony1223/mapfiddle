@@ -19,4 +19,14 @@ class MapModel extends CI_Model {
       $this->db->get_where("fiddles",["key"=> $key])->result()
     );
   }
+
+  public function get_fiddles($keys){
+
+    $this->db->where_in("key" , $keys);
+    $q = $this->db->get("fiddles");
+
+    return array_first_item(
+      $q->result()
+    );
+  }
 }
