@@ -120,7 +120,11 @@ class Api extends MY_Controller {
 		foreach($fiddles as $fiddle){
 			$feature = [
 				"type"=>"Feature",
-				"properties" => [],
+				"properties" => [
+					"key" => $fiddle->key,
+                                	"type" => $fiddle->type,
+                                	"title" => $fiddle->title
+				],
 				"geometry" => [
 
 				]

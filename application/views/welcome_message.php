@@ -15,6 +15,10 @@
   if(window.points.push == null){
     window.points = [];
   }
+
+  window.map_q = (<?=json_encode($q)?>);
+
+  window.zoom =  (<?=json_encode($z)?>);
 </script>
 <div id="container" class="container">
 	<h1 style="text-align:center;"> Create your marker immediately. </h1>
@@ -25,7 +29,7 @@
       <!-- <button class="js-fork btn btn-default">Fork</button> -->
     <a style='display:none;margin-left:40px;' id="saved_link" href="">Link</a>
   </p>
-
+  <p> queryString:  q = default location, z = zoom, type = point/line/area  </p> 
   <div id="mapid" style="width: 100%; height: 600px"></div>
   
   
@@ -159,8 +163,9 @@
       setCenter:function(latlng){
         latlng && this.map.panTo(new L.LatLng(latlng[0],latlng[1]));
       },
-      setTips:function(tips){
+      setTips:function(tips,show_marker){
         this.tips = tips;
+	this.show_marker = show_marker;
         this.render();
       },
       render:function(){
@@ -173,16 +178,21 @@
         this.tipMakers.forEach(function(m){
           that.map.removeLayer(m);
         });
-        this.tips.forEach(function(p){
-          var marker = L.circle(p.latlng,30,{
-              color: 'red',
-              fillColor: '#f03',
-              fillOpacity: 0.5
-          }).addTo(that.map);
 
-          marker.bindPopup(p.address);
-          that.currentMarkers.push(marker);
-        });
+	if(this.show_marker){
+          this.tips.forEach(function(p){
+		//http://maps.google.com/mapfiles/ms/icons/red-dot.png
+             var marker = L.marker(p.latlng,{
+		icon: L.icon({iconUrl:"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}),
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5
+             }).addTo(that.map);
+
+             marker.bindPopup(p.address);
+             that.currentMarkers.push(marker);
+       	  });
+	}
 
         if(this.type == 0 || this.points.length == 1){
           this.points.forEach(function(p){
@@ -321,10 +331,16 @@
 
 
     var searchGEOCoding = function(){
-      var search = $("[name=search]").val();
+
+	var str =  $("[name=search]").val();
+	return _search(str,true);
+
+    };
+
+    var _search = function(str,show_marker){
 
       $.get("https://maps.googleapis.com/maps/api/geocode/json",{
-        address:$("[name=search]").val(),
+        address:str,
         key:"AIzaSyBSIFJslwcgjr4ttFgt0TX3KSG6sqLkzY8"
       },function(res){
         if(res.status != "OK"){
@@ -339,7 +355,7 @@
           };
         });
 
-        map.setTips(items);
+        map.setTips(items,show_marker);
 
         var out = items.map(function(i){
           return "<li><a  class='js-search-item' data-latlng='"+i.latlng[0]+","+i.latlng[1]+"' href='#'>"+i.address+"</a></li>"
@@ -386,18 +402,17 @@
       $(".js-close-control").click();
     }
 
-    var mymap = L.map('mapid').setView(center, 15);
+    var mymap = L.map('mapid').setView(center,  window.zoom || 16);
 
     
-
     map.bind(mymap);
     mymap.on("click",function(e){
       map.handleClick(e.latlng);
     });
     map.render();
 
-    var osm = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
-      maxZoom: 18,
+    var osm = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+      maxZoom: window.m_zoom || 21,
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
@@ -409,6 +424,12 @@
     mymap.addLayer(ggl2);
     mymap.addControl(new L.Control.Layers( {'Google':ggl2,'OSM':osm}, {}));
 
+
+    setTimeout(function(){
+	if(window.map_q){
+		_search(window.map_q,true);
+	}
+    });
   </script>
   
 </div>

@@ -20,10 +20,16 @@ class Welcome extends MY_Controller {
 	 */
 	public function index()
 	{
+		$q = $this->input->get("q");
+		$t = $this->input->get("type");
+
+		$zoom = $this->input->get("z");
 		$this->load->view('welcome_message',[
 				"fiddle_title" => "new Marker",
 				"points" => "[]",
-				"fiddle_type" => 0
+				"fiddle_type" => $t ==  ""? 0: intval($t),
+				"q" => $q,
+				"z" => $zoom
 		]);
 		session_write_close();
 	}
